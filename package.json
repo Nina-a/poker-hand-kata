@@ -4,7 +4,7 @@
   "description": "Poker Kata in JS",
   "main": "src/ index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --require @babel/register"
   },
   "author": "",
   "repository": {
@@ -13,8 +13,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "chai": "^4.2.0",
     "lodash": "^4.17.4",
-    "mocha": "^3.2.0"
+    "mocha": "^8.2.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/register": "^7.12.10",
+    "@babel/runtime": "^7.12.5"
   }
 }
