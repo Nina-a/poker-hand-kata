@@ -7,6 +7,11 @@ describe('Poker Hand', function () {
     expect(pokerResult(['2H', '3D', '5S', '9C', 'KD'], ['2C', '3H', '4S', '8C', 'AH'])).to.be.equal('2');
   });
 
+  it('la plus grande paire gagne', () => {
+    expect(pokerResult(['2H', '2S', '9S', '9C', 'KD'], ['2C', '3H', '4S', '4C', 'AH'])).to.be.equal('1');
+  }
+  )
+
   // it('should evaluate a hand as high card', function () {
   //   expect(false).to.be.true;
   // });
