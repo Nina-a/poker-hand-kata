@@ -85,7 +85,7 @@ describe('Poker Hand', function () {
     mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
     mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
     mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
-    mainsPlusFaibles.set('couleur', ['3D', '4D', '5D', '6D', '7D']);
+    mainsPlusFaibles.set('couleur', ['3D', '4D', 'TD', '6D', '5D']);
 
     mainsPlusFaibles.forEach((mainPLusFaible, key) => {
       it(`la couleur gagne contre ${key}`, () => {
@@ -125,11 +125,32 @@ describe('Poker Hand', function () {
     mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
     mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
     mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
-    mainsPlusFaibles.set('full', ['3D', '7S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
 
     mainsPlusFaibles.forEach((mainPLusFaible, key) => {
       it(`le carré gagne contre ${key}`, () => {
         let main1 = ['KC', '8S', '8C', '8S', '8H'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe ('Quinte flush', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('quinte flush', ['3D', '4D', '5D', '6D', '7D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la quinte flush gagne contre ${key}`, () => {
+        let main1 = ['4C', '5C', '6C', '7C', '8C'];
         //gagnant avec une couleur devant des cartes simples
         testEtTestInverse(main1, mainPLusFaible);
       });

@@ -24,53 +24,59 @@ function pokerResult(hand1, hand2) {
     suite2,
     couleur1,
     couleur2,
-    carre1, carre2, brelan1, brelan2, full1, full2,
+    carre1,
+    carre2,
+    brelan1,
+    brelan2,
+    full1,
+    full2,
   } = initialisation(hand1, hand2);
 
+  // Il y a au carré un full dans chaque main
+  if (carre1 && carre2) {
+    var hauteurCarre1 = numberOfSameCard1.indexOf(4);
+    var hauteurCarre2 = numberOfSameCard2.indexOf(4);
 
-    // Il y a au carré un full dans chaque main
-    if (
-      carre1 && carre2
-    ) {
-      var hauteurCarre1 = numberOfSameCard1.indexOf(4);
-      var hauteurCarre2 = numberOfSameCard2.indexOf(4);
-  
-      var result = hauteurCarre1 > hauteurCarre2 ? '1' : '2';
-  
+    var result = hauteurCarre1 > hauteurCarre2 ? '1' : '2';
+
+    return result;
+  }
+
+  // Il y a au moins un carre dans une main
+  else if (carre1 || carre2)
+    if (full1 || full2) {
+      // Il y a une couleur dans l'autre main => carre gagne
+      let result = carre1 ? '1' : '2';
       return result;
     }
-  
-    // Il y a au moins un carre dans une main
-    else if (
-      carre1 || carre2
-    ) // Il y a une couleur dans l'autre main => carre gagne
-      if (full1 || full2) {
-        let result = carre1 ? '1' : '2';
-      return result;}
-      // Il y a une couleur dans l'autre main => carre gagne
-      else if (couleur1 || couleur2) {
-        let result = carre1 ? '1' : '2';
-        return result;
-      // Il y a une suite dans l'autre main => carre gagne
-      } else if (suite1 || suite2) {
-        let result = carre1 ? '1' : '2';
-        return result;
+    // il y a une quinte flush => la quinte gagne
+    else if ((couleur1 && suite1) || (couleur2 && suite2)) {
+      let result = couleur1 && suite1 ? '1' : '2';
+      return result;
+    }
+    // Il y a une couleur dans l'autre main => carre gagne
+    else if (couleur1 || couleur2) {
+      let result = carre1 ? '1' : '2';
+      return result;
+    }
+    // Il y a une suite dans l'autre main => carre gagne
+    else if (suite1 || suite2) {
+      let result = carre1 ? '1' : '2';
+      return result;
       // Il y a un brelan dans l'autre main => carre gagne
-      } else if (brelan1 || brelan2) {
-        let result = carre1 ? '1' : '2';
-        return result;
-      // Le carre gagne sur les autres combinaisons
-      } else {
-        let result = numberOfSameCard1.indexOf(4) !== -1 ? '1' : '2';
-        return result;
-      }
-    
+    } else if (brelan1 || brelan2) {
+      let result = carre1 ? '1' : '2';
+      return result;
+    }
 
+    // Le carre gagne sur les autres combinaisons
+    else {
+      let result = numberOfSameCard1.indexOf(4) !== -1 ? '1' : '2';
+      return result;
+    }
 
   // Il y a au moins un full dans la main
-  if (
-    full1 && full2
-  ) {
+  if (full1 && full2) {
     var hauteurFull1 = numberOfSameCard1.indexOf(3);
     var hauteurFull2 = numberOfSameCard2.indexOf(3);
 
@@ -80,22 +86,25 @@ function pokerResult(hand1, hand2) {
   }
 
   // Il y a au moins un full dans une main
-  else if (
-    full1 || full2
-  ) {
+  else if (full1 || full2) {
+    // Il y a une quinte  flush => la quinte flush gagne
+    if ((couleur1 && suite1) || (couleur2 && suite2)) {
+      let result = couleur1 && suite1 ? '1' : '2';
+      return result;
+    }
     // Il y a une couleur dans l'autre main => full gagne
-    if (couleur1 || couleur2) {
+    else if (couleur1 || couleur2) {
       let result = full1 ? '1' : '2';
       return result;
-    // Il y a une suite dans l'autre main => full gagne
+      // Il y a une suite dans l'autre main => full gagne
     } else if (suite1 || suite2) {
       let result = full1 ? '1' : '2';
       return result;
-    // Il y a un brelan dans l'autre main => full gagne
+      // Il y a un brelan dans l'autre main => full gagne
     } else if (brelan1 || brelan2) {
       let result = full1 ? '1' : '2';
       return result;
-    // Le brelan gagne sur les autres combinaisons
+      // Le brelan gagne sur les autres combinaisons
     } else {
       let result = numberOfSameCard1.indexOf(3) !== -1 ? '1' : '2';
       return result;
@@ -103,9 +112,7 @@ function pokerResult(hand1, hand2) {
   }
 
   // Il y a au moins un brelan dans chaque main
-  if (
-    brelan1 && brelan2
-  ) {
+  if (brelan1 && brelan2) {
     var hauteurBrelan1 = numberOfSameCard1.indexOf(3);
     var hauteurBrelan2 = numberOfSameCard2.indexOf(3);
 
@@ -115,18 +122,16 @@ function pokerResult(hand1, hand2) {
   }
 
   // Il y a un brelan dans une main
-  else if (
-    brelan1 || brelan2
-  ) {
+  else if (brelan1 || brelan2) {
     // Il y a une couleur dans l'autre main => Couleur gagne
     if (couleur1 || couleur2) {
       let result = couleur1 ? '1' : '2';
       return result;
-    // Il y a une suite dans l'autre main => Suite gagne
+      // Il y a une suite dans l'autre main => Suite gagne
     } else if (suite1 || suite2) {
       let result = suite1 ? '1' : '2';
       return result;
-    // Le brelan gagne sur les autres combinaisons
+      // Le brelan gagne sur les autres combinaisons
     } else {
       let result = numberOfSameCard1.indexOf(3) !== -1 ? '1' : '2';
       return result;
@@ -168,7 +173,12 @@ function pokerResult(hand1, hand2) {
     numberOfSameCard1.indexOf(2) == -1 &&
     numberOfSameCard2.indexOf(2) == -1
   ) {
-    if (couleur1 && couleur2) {
+    if ((couleur1 && suite1) & (couleur2 && suite2)) {
+      return simpleCarte(ordreCard1, ordreCard2);
+    } else if ((couleur1 && suite1) || (couleur2 && suite2)) {
+      let result = couleur1 && suite1 ? '1' : '2';
+      return result;
+    } else if (couleur1 && couleur2) {
       return simpleCarte(ordreCard1, ordreCard2);
     } else if (couleur1 || couleur2) {
       let result = couleur1 ? '1' : '2';
@@ -243,10 +253,12 @@ function initialisation(hand1, hand2) {
     }
   }
 
-  var {carre: carre1, full: full1, brelan: brelan1}  = nameHand(numberOfSameCard1);
-  var {carre: carre2, full: full2, brelan: brelan2} = nameHand(numberOfSameCard2);
-
-
+  var { carre: carre1, full: full1, brelan: brelan1 } = nameHand(
+    numberOfSameCard1
+  );
+  var { carre: carre2, full: full2, brelan: brelan2 } = nameHand(
+    numberOfSameCard2
+  );
 
   // Permet de savoir si on a une suite ou non
   var suite1 = isSuite(numberOfSameCard1, ordreCard1);
@@ -262,7 +274,11 @@ function initialisation(hand1, hand2) {
     couleur1,
     couleur2,
     carre1,
-    carre2, full1, full2, brelan1, brelan2
+    carre2,
+    full1,
+    full2,
+    brelan1,
+    brelan2,
   };
 }
 function nameHand(numberOfSameCard) {
@@ -272,13 +288,15 @@ function nameHand(numberOfSameCard) {
 
   if (numberOfSameCard.indexOf(4) !== -1) {
     carre = true;
-  } else if (numberOfSameCard.indexOf(2) !== -1 &&
-    numberOfSameCard.indexOf(3) !== -1) {
+  } else if (
+    numberOfSameCard.indexOf(2) !== -1 &&
+    numberOfSameCard.indexOf(3) !== -1
+  ) {
     full = true;
   } else if (numberOfSameCard.indexOf(3) !== -1) {
     brelan = true;
   }
-  return {carre, full, brelan };
+  return { carre, full, brelan };
 }
 
 // Fonction permettant de savoir si les mains sont des suites ou
