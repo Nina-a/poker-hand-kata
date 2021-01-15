@@ -3,98 +3,195 @@ import { pokerResult } from '../poker.js';
 const expect = require('chai').expect;
 
 describe('Poker Hand', function () {
+  describe('Single Cars', function () {
+    it('la plus haute carte gagne', () => {
+      let main1 = ['2H', '3C', '5H', '9H', 'KH'];
+      let main2 = ['2C', '3H', '4S', '8C', 'QH'];
 
-  describe('Single Cars', function(){
-    it('la plus haute carte gagne #1', () => {
-      expect(
-        pokerResult(
-          ['2H', '3D', '5S', '9C', 'KD'], // 1 gagne avec K
-          ['2C', '3H', '4S', '8C', 'QH']
-        )
-      ).to.be.equal('1');
-    });
-
-    it('la plus haute carte gagne #2', () => {
-      expect(
-        pokerResult(
-          ['2H', '3D', '5S', '9C', 'KD'],
-          ['2C', '3H', '4S', '8C', 'AH'] // 2 gagne avec A
-        )
-      ).to.be.equal('2');
-    });
-  })
-
-  describe('Pair', function () {
-    it('la plus grande paire gagne #1', () => {
-      expect(
-        pokerResult(
-          ['2H', '4S', '9S', 'KC', 'KD'], // 1 gagne avec la paire de roi
-          ['2C', '3H', '5S', '5C', 'AH']
-        )
-      ).to.be.equal('1');
-    });
-
-    it('la plus grande paire gagne #2', () => {
-      expect(
-        pokerResult(
-          ['2C', '3H', '4S', '4C', 'AH'],
-          ['2H', '2S', '9S', 'KC', 'KD'] // 2 gagne avec la paire de Roi
-        )
-      ).to.be.equal('2');
-    });
-
-     it('la main contenant au moins une paire contre des simples cartes gagne #1', () => {
-      expect(
-        pokerResult(
-          ['2H', '3S', '9S', '9C', 'KD'], // gagne avec une paire de 9
-          ['2C', '3H', '4S', '5C', 'TH']
-        )
-      ).to.be.equal('1');
-    });
-
-    it('la main contenant au moins une paire contre des simples cartes gagne #2', () => {
-      expect(
-        pokerResult(
-          ['2H', '3S', '5S', '9C', 'KD'],
-          ['2C', '3H', '4S', 'TC', 'TH']// gagne avec une paire de 10
-        )
-      ).to.be.equal('2');
-    });
-
-    it('la main contenant 2 paires contre 1 paire gagne #1 ', () => {
-      expect(
-        pokerResult(
-          ['2H', '2S', '9S', '9C', 'KD'],// double paire de 9 et de 2
-          ['2C', '3H', '3S', '5C', 'TH']
-        )
-      ).to.be.equal('1');
-    });
-
-    it('la main contenant 2 paires contre 1 paire gagne #2 ', () => {
-      expect(
-        pokerResult(
-          ['2H', '2S', '9S', 'AC', 'KD'],// double paire de 9 et de 2
-          ['2C', '3H', '3S', 'TC', 'TH']
-        )
-      ).to.be.equal('2');
-    });
-
-    it('la main avec la plus grande des 2 paires gagne ', () => {
-      expect(
-        pokerResult(
-          ['2H', '2S', '9S', '9C', 'KD'],
-          ['2C', '2H', 'TS', '5C', 'TH']
-        )
-      ).to.be.equal('2');
-    });
-
-    it('la main avec la plus grande des 2 paires gagne #2 ', () => {
-      expect(
-        pokerResult(
-          ['3H', '3S', '9S', '9C', 'KD'],
-          ['2C', '5H', '9S', '5C', '9H']
-        )
-      ).to.be.equal('2');
+      testEtTestInverse(main1, main2);
     });
   });
+
+  describe('Pair', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2C', '5H', '5S', 'KC', 'TH']);
+    mainsPlusFaibles.set('paireIdentique + carte simple inférieure', ['2C', '7D', '7S', 'QC', 'TH']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la paire gagne contre ${key}`, () => {
+        let main1 = ['5C', '6C', '7C', '7H', 'KC'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe('doublePair', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2C', '5H', '5S', 'KC', 'TH']);
+    mainsPlusFaibles.set('doublepaire', ['2C', '5H', '5S', 'TC', 'TH']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la paire gagne contre ${key}`, () => {
+        let main1 = ['5C', '7C', '7C', 'KH', 'KC'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe('Three of a Kind', function () {
+
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', '5C', 'TH']);
+    mainsPlusFaibles.set('brelan',  ['2C', '3H', '8S', '8C', '8H']);
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`le brelan gagne contre ${key}`, () => {
+        let main1 = ['2H', 'AD', '9S', '9C', '9D'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+
+  });
+
+  describe('Suite', function () {
+
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('doublePaire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la suite gagne contre ${key}`, () => {
+        let main1 = ['5C', '6C', '7C', '8C', '9C'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+
+  });
+  describe('Couleur', function () {
+
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', '4D', 'TD', '6D', '5D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la couleur gagne contre ${key}`, () => {
+        let main1 = ['2C', '3C', '8C', 'TC', 'QC'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe ('Full', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`le full gagne contre ${key}`, () => {
+        let main1 = ['KC', 'KS', '8C', '8S', '8H'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe ('Carré', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`le carré gagne contre ${key}`, () => {
+        let main1 = ['KC', '8S', '8C', '8S', '8H'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe ('Quinte flush', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('quinte flush', ['3D', '4D', '5D', '6D', '7D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la quinte flush gagne contre ${key}`, () => {
+        let main1 = ['4C', '5C', '6C', '7C', '8C'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  describe ('Quinte flush Royale', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('quinte flush', ['3D', '4D', '5D', '6D', '7D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la quinte flush royale gagne contre ${key}`, () => {
+        let main1 = ['TC', 'JC', 'QC', 'KC', 'AC'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
+  function testEtTestInverse(main1, main2) {
+    expect(
+      pokerResult(
+        main1,
+        main2
+        // 2 gagne avec la paire de Roi
+      )
+    ).to.be.equal('1');
+    expect(
+      pokerResult(
+        main2,
+        main1
+        // 2 gagne avec la paire de Roi
+      )
+    ).to.be.equal('2');
+  }
 });
