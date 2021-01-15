@@ -301,11 +301,11 @@ function nameHand(numberOfSameCard) {
 
 // Fonction permettant de savoir si les mains sont des suites ou
 function isSuite(numberOfSameCard, ordreCard) {
+  var suite = false;
   if (
     !(numberOfSameCard.indexOf(2) !== -1 && numberOfSameCard.indexOf(3) !== -1)
   ) {
     let valeurMin1 = ordreCard[0];
-    var suite = false;
     if (valeurMin1 !== 0) {
       let valeurMax1 = ordreCard[4];
       suite = valeurMax1 == valeurMin1 + 4;

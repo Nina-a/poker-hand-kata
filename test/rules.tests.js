@@ -157,6 +157,27 @@ describe('Poker Hand', function () {
     });
   });
 
+  describe ('Quinte flush Royale', function () {
+    var mainsPlusFaibles = new Map();
+    mainsPlusFaibles.set('singleCard', ['2C', '3H', '4S', '8C', 'QH']);
+    mainsPlusFaibles.set('paire', ['2H', '2S', '9S', 'KC', 'KD']);
+    mainsPlusFaibles.set('doublePaire', ['2C', '5H', 'TS', 'KC', 'TH']);
+    mainsPlusFaibles.set('brelan', ['2H', '3D', '9S', '9C', '9D']);
+    mainsPlusFaibles.set('suite', ['2H', '3D', '4S', '5C', '6D']);
+    mainsPlusFaibles.set('couleur', ['3D', 'KD', 'TD', '6D', '7D']);
+    mainsPlusFaibles.set('full', ['3D', '3S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('carre', ['3D', '7S', '7D', '7C', '7H']);
+    mainsPlusFaibles.set('quinte flush', ['3D', '4D', '5D', '6D', '7D']);
+
+    mainsPlusFaibles.forEach((mainPLusFaible, key) => {
+      it(`la quinte flush royale gagne contre ${key}`, () => {
+        let main1 = ['TC', 'JC', 'QC', 'KC', 'AC'];
+        //gagnant avec une couleur devant des cartes simples
+        testEtTestInverse(main1, mainPLusFaible);
+      });
+    });
+  });
+
   function testEtTestInverse(main1, main2) {
     expect(
       pokerResult(
