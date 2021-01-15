@@ -27,6 +27,46 @@ function pokerResult(hand1, hand2) {
     carre1, carre2, brelan1, brelan2, full1, full2,
   } = initialisation(hand1, hand2);
 
+
+    // Il y a au carré un full dans chaque main
+    if (
+      carre1 && carre2
+    ) {
+      var hauteurCarre1 = numberOfSameCard1.indexOf(4);
+      var hauteurCarre2 = numberOfSameCard2.indexOf(4);
+  
+      var result = hauteurCarre1 > hauteurCarre2 ? '1' : '2';
+  
+      return result;
+    }
+  
+    // Il y a au moins un carre dans une main
+    else if (
+      carre1 || carre2
+    ) // Il y a une couleur dans l'autre main => carre gagne
+      if (full1 || full2) {
+        let result = carre1 ? '1' : '2';
+      return result;}
+      // Il y a une couleur dans l'autre main => carre gagne
+      else if (couleur1 || couleur2) {
+        let result = carre1 ? '1' : '2';
+        return result;
+      // Il y a une suite dans l'autre main => carre gagne
+      } else if (suite1 || suite2) {
+        let result = carre1 ? '1' : '2';
+        return result;
+      // Il y a un brelan dans l'autre main => carre gagne
+      } else if (brelan1 || brelan2) {
+        let result = carre1 ? '1' : '2';
+        return result;
+      // Le carre gagne sur les autres combinaisons
+      } else {
+        let result = numberOfSameCard1.indexOf(4) !== -1 ? '1' : '2';
+        return result;
+      }
+    
+
+
   // Il y a au moins un full dans la main
   if (
     full1 && full2
