@@ -196,43 +196,12 @@ function pokerResult(hand1, hand2) {
 
 function initialisation(hand1, hand2) {
   // Tableau donnant la valeur des cartes dans la main
-  let valeurCardHand1 = [];
-  for (var i = 0; i < hand1.length; i++) {
-    let valeur = hand1[i].substr(0, 1);
-    valeurCardHand1.push(valeur);
-  }
+  var ordreCard1 = valeurCardHand(hand1);
+  var ordreCard2 = valeurCardHand(hand2);
 
   // Tableau donnant les couleurs des cartes
-  let colorCardHand1 = new Map();
-  for (var i = 0; i < hand1.length; i++) {
-    let valeur = hand1[i].substr(1, 1);
-    colorCardHand1.set(valeur, i);
-  }
-  let couleur1 = colorCardHand1.size == 1;
-
-  // Tableau donnant la valeur des cartes dans la main
-  let valeurCardHand2 = [];
-  for (var i = 0; i < hand2.length; i++) {
-    let valeur = hand2[i].substr(0, 1);
-    valeurCardHand2.push(valeur);
-  }
-
-  // Tableau donnant les couleurs des cartes
-  let colorCardHand2 = new Map();
-  for (var i = 0; i < hand2.length; i++) {
-    let valeur = hand2[i].substr(1, 1);
-    colorCardHand2.set(valeur, i);
-  }
-  let couleur2 = colorCardHand2.size == 1;
-
-  function compareNombres(a, b) {
-    return a - b;
-  }
-  // tableau convertissant et ordonnant la valeur de la carte en ordre de la plus petite à la plus grande
-  let ordreCard1 = valeurCardHand1.map((x) => order.indexOf(x));
-  let ordreCard2 = valeurCardHand2.map((x) => order.indexOf(x));
-  ordreCard1 = ordreCard1.sort(compareNombres);
-  ordreCard2 = ordreCard2.sort(compareNombres);
+  var couleur1 = colorHand(hand1);
+  var couleur2 = colorHand(hand2);
 
   // Tableau permettant de connaitre le nombre de fois ou l'on la même carte
   let numberOfSameCard1 = [];
@@ -281,6 +250,30 @@ function initialisation(hand1, hand2) {
     brelan2,
   };
 }
+function colorHand(hand) {
+  let colorCardHand = new Map();
+  for (var i = 0; i < hand.length; i++) {
+    let valeur = hand[i].substr(1, 1);
+    colorCardHand.set(valeur, i);
+  }
+  let couleur = colorCardHand.size == 1;
+  return  couleur ;
+}
+function compareNombres(a, b) {
+  return a - b;
+}
+
+function valeurCardHand(hand) {
+  let valeurCardHand = [];
+  for (var i = 0; i < hand.length; i++) {
+    let valeur = hand[i].substr(0, 1);
+    valeurCardHand.push(valeur);
+  }
+  let ordreCard = valeurCardHand.map((x) => order.indexOf(x));
+  ordreCard = ordreCard.sort(compareNombres);
+  return ordreCard ;
+}
+
 function nameHand(numberOfSameCard) {
   var carre = false;
   var full = false;
