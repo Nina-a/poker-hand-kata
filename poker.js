@@ -204,24 +204,10 @@ function initialisation(hand1, hand2) {
   var couleur2 = colorHand(hand2);
 
   // Tableau permettant de connaitre le nombre de fois ou l'on la même carte
-  let numberOfSameCard1 = [];
-  for (var i = 0; i < ordreCard1.length; i++) {
-    if (numberOfSameCard1[ordreCard1[i]]) {
-      numberOfSameCard1[ordreCard1[i]] = numberOfSameCard1[ordreCard1[i]] + 1;
-    } else {
-      numberOfSameCard1[ordreCard1[i]] = 1;
-    }
-  }
+  var numberOfSameCard1 = sameCards(ordreCard1);
+  var numberOfSameCard2 = sameCards(ordreCard2);
 
-  let numberOfSameCard2 = [];
-  for (var i = 0; i < ordreCard2.length; i++) {
-    if (numberOfSameCard2[ordreCard2[i]]) {
-      numberOfSameCard2[ordreCard2[i]] = numberOfSameCard2[ordreCard2[i]] + 1;
-    } else {
-      numberOfSameCard2[ordreCard2[i]] = 1;
-    }
-  }
-
+  // Retourne si ou ou non il ya telle ou telle main
   var { carre: carre1, full: full1, brelan: brelan1 } = nameHand(
     numberOfSameCard1
   );
@@ -250,6 +236,18 @@ function initialisation(hand1, hand2) {
     brelan2,
   };
 }
+function sameCards(ordreCard) {
+  let numberOfSameCard = [];
+  for (var i = 0; i < ordreCard.length; i++) {
+    if (numberOfSameCard[ordreCard[i]]) {
+      numberOfSameCard[ordreCard[i]] = numberOfSameCard[ordreCard[i]] + 1;
+    } else {
+      numberOfSameCard[ordreCard[i]] = 1;
+    }
+  }
+  return numberOfSameCard;
+}
+
 function colorHand(hand) {
   let colorCardHand = new Map();
   for (var i = 0; i < hand.length; i++) {
