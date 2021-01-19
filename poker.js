@@ -46,7 +46,7 @@ function pokerResult(hand1, hand2) {
   else if (carre1 || carre2)
     if (full1 || full2) {
       // Il y a une couleur dans l'autre main => carre gagne
-      let result = carre1 ? '1' : '2';
+      let result = carre1 ? '3' : '2';
       return result;
     }
     // il y a une quinte flush => la quinte gagne
